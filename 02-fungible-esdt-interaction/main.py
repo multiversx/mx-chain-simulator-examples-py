@@ -1,7 +1,7 @@
 import sys
 import time
 
-from multiversx_sdk.core import Token, AddressFactory, TokenTransfer
+from multiversx_sdk.core import Token, TokenTransfer, Address
 from multiversx_sdk.network_providers.transactions import TransactionOnNetwork
 from multiversx_sdk.core import TokenManagementTransactionsFactory, TransactionsFactoryConfig, TransferTransactionsFactory
 from multiversx_sdk.network_providers import ProxyNetworkProvider
@@ -17,7 +17,7 @@ def main():
 
     key = UserSecretKey.generate()
     sender_bech32 = key.generate_public_key().to_address("erd").to_bech32()
-    sender = AddressFactory("erd").create_from_bech32(sender_bech32)
+    sender = Address.new_from_bech32(sender_bech32)
     print(f"working with the generated address as sender: {sender_bech32}")
 
     print(f"    requesting user funds for the sender address: {sender_bech32}")
@@ -53,7 +53,7 @@ def main():
         can_change_owner=False,
         can_add_special_roles=False,
     )
-    issue_tx.amount = 50000000000000000 #the issue token transaction has a cost of 0.05 EGLD
+    #the issue token transaction has a cost of 0.05 EGLD, the value is set automatically by the create_transaction_for_issuing_fungible call
     issue_tx.nonce = provider.get_account(sender).nonce
     issue_tx.signature = b"dummy"
     tx_hash = provider.send_transaction(issue_tx)
@@ -75,7 +75,7 @@ def main():
 
     key = UserSecretKey.generate()
     receiver_bech32 = key.generate_public_key().to_address("erd").to_bech32()
-    receiver = AddressFactory("erd").create_from_bech32(receiver_bech32)
+    receiver = Address.new_from_bech32(receiver_bech32)
     print(f"working with the generated address as receiver: {receiver_bech32}\n")
 
     print(f"creating a transaction that sends 500 {token_identifier_string} from {sender_bech32} to {receiver_bech32}")
