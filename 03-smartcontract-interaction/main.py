@@ -18,7 +18,7 @@ def main():
 
     key = UserSecretKey.generate()
     sender_bech32 = key.generate_public_key().to_address("erd").to_bech32()
-    sender = AddressFactory("erd").create_from_bech32(sender_bech32)
+    sender = Address.new_from_bech32(sender_bech32)
     print(f"working with the generated address as sender: {sender_bech32}")
 
     print(f"    requesting user funds for the sender address: {sender_bech32}")
